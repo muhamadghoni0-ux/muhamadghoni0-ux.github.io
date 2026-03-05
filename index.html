@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaGrid: Adaptif Mark Reader — Ghoni Digital Solutions</title>
+  <meta name="description" content="NovaGrid: Adaptif Mark Reader — Developer website and privacy policy by Ghoni Digital Solutions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080c10;
+      --surface: #0d1318;
+      --border: #1a2530;
+      --accent: #00d4ff;
+      --accent2: #7b61ff;
+      --text: #e8edf2;
+      --muted: #6b7e8f;
+      --card: #0f1822;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(8,12,16,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 6rem 2.5rem 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0,212,255,0.08);
+      border: 1px solid rgba(0,212,255,0.25);
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      margin-bottom: 2rem;
+      animation: fadeDown 0.6s ease both;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3rem, 7vw, 6rem);
+      line-height: 1.0;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+
+    .hero h1 .highlight {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 580px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--accent);
+      color: #000;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.85rem 1.8rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 28px rgba(0,212,255,0.45);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.85rem 1.8rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      background: rgba(0,212,255,0.05);
+    }
+
+    /* ── GLOW ORBS ── */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 {
+      width: 400px; height: 400px;
+      background: rgba(0,212,255,0.07);
+      top: 10%; right: 5%;
+    }
+    .orb-2 {
+      width: 300px; height: 300px;
+      background: rgba(123,97,255,0.06);
+      bottom: 20%; left: 10%;
+    }
+
+    /* ── FEATURES ── */
+    .section {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 2.5rem;
+    }
+
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .section h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 3rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .feature-card {
+      background: var(--card);
+      padding: 2rem;
+      transition: background 0.2s;
+    }
+    .feature-card:hover { background: #121d27; }
+
+    .feature-icon {
+      width: 44px; height: 44px;
+      background: rgba(0,212,255,0.08);
+      border: 1px solid rgba(0,212,255,0.15);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .feature-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .feature-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0 2.5rem;
+    }
+
+    /* ── PRIVACY SECTION ── */
+    .privacy-wrapper {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .privacy-toc {
+      position: sticky;
+      top: 80px;
+    }
+
+    .privacy-toc p {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .toc-list a {
+      font-size: 0.83rem;
+      color: var(--muted);
+      text-decoration: none;
+      display: block;
+      padding: 0.4rem 0.8rem;
+      border-left: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      border-radius: 0 4px 4px 0;
+    }
+    .toc-list a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(0,212,255,0.04);
+    }
+
+    .privacy-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .privacy-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.8rem 2rem;
+      scroll-margin-top: 90px;
+    }
+
+    .privacy-block h3 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--accent);
+      margin-bottom: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .privacy-block h3 .icon { font-size: 1rem; }
+
+    .privacy-block p {
+      font-size: 0.88rem;
+      color: #a0b0be;
+      line-height: 1.75;
+    }
+
+    .privacy-block a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+    .privacy-block a:hover { border-color: var(--accent); }
+
+    /* ── CONTACT ── */
+    .contact-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+
+    .contact-card h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.8rem;
+    }
+    .contact-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+
+    .email-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.88rem;
+      color: var(--accent);
+      text-decoration: none;
+      background: rgba(0,212,255,0.07);
+      border: 1px solid rgba(0,212,255,0.2);
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .email-link:hover {
+      background: rgba(0,212,255,0.12);
+      box-shadow: 0 0 20px rgba(0,212,255,0.2);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    footer .footer-logo span { color: var(--accent); }
+
+    footer p {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    footer .footer-policy-date {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.2rem; }
+      .nav-links { display: none; }
+      .hero, .section { padding-left: 1.2rem; padding-right: 1.2rem; }
+      .hero h1 { font-size: 2.8rem; }
+      .privacy-wrapper { grid-template-columns: 1fr; }
+      .privacy-toc { display: none; }
+      footer { flex-direction: column; text-align: center; }
+      .divider { margin: 0 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#"><span>Nova</span>Grid</a>
+    <ul class="nav-links">
+      <li><a href="#about">// about</a></li>
+      <li><a href="#features">// features</a></li>
+      <li><a href="#privacy">// privacy</a></li>
+      <li><a href="#contact">// contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero" id="about">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="hero-badge">ANDROID APP — FREEMIUM</div>
+    <h1>
+      Adaptif<br>
+      <span class="highlight">Mark Reader</span>
+    </h1>
+    <p>
+      Automatic multiple-choice answer sheet correction using your phone camera — no special template sheets required. Built for educators who value speed, accuracy, and simplicity.
+    </p>
+    <div class="hero-cta">
+      <a href="https://play.google.com/store" class="btn-primary" target="_blank">
+        ▶ &nbsp;Get on Google Play
+      </a>
+      <a href="#privacy" class="btn-secondary">Privacy Policy →</a>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <p class="section-label">// what it does</p>
+    <h2>Built for<br>Modern Educators</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📷</div>
+        <h3>Camera-Based Scanning</h3>
+        <p>Point, shoot, grade. Captures and processes answer sheets using your phone's camera — no scanners, no special paper needed.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Adaptive Recognition</h3>
+        <p>Intelligent mark detection adapts to various lighting conditions and sheet orientations for consistent accuracy.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Excel Export</h3>
+        <p>Export full class score recaps and per-question statistics directly to Excel. Premium feature included in the free trial.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>Zero-Template Design</h3>
+        <p>Works with standard answer sheets. No proprietary forms. No locked-in workflows. Just results.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Privacy First</h3>
+        <p>No data collection. No registration required. Everything stays on your device. Full privacy, by design.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🆓</div>
+        <h3>3-Month Free Trial</h3>
+        <p>Full premium access for 3 months — including ad-free experience and Excel export — before any subscription begins.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- PRIVACY -->
+  <section class="section" id="privacy">
+    <p class="section-label">// legal</p>
+    <h2>Privacy Policy</h2>
+    <div class="privacy-wrapper">
+
+      <nav class="privacy-toc" aria-label="Table of contents">
+        <p>On this page</p>
+        <ul class="toc-list">
+          <li><a href="#p-intro">Overview</a></li>
+          <li><a href="#p-collection">Data Collection</a></li>
+          <li><a href="#p-location">Location</a></li>
+          <li><a href="#p-third-party">Third Parties</a></li>
+          <li><a href="#p-optout">Opt-Out</a></li>
+          <li><a href="#p-children">Children</a></li>
+          <li><a href="#p-security">Security</a></li>
+          <li><a href="#p-changes">Changes</a></li>
+          <li><a href="#p-consent">Consent</a></li>
+        </ul>
+      </nav>
+
+      <div class="privacy-content">
+
+        <div class="privacy-block" id="p-intro">
+          <h3><span class="icon">📄</span> Overview</h3>
+          <p>This privacy policy applies to the <strong>NovaGrid: Adaptif Mark Reader</strong> app for mobile devices, created by <strong>Ghoni Digital Solutions</strong> as a Freemium service. This service is provided "AS IS". Policy effective: <strong>November 14, 2025</strong>.</p>
+        </div>
+
+        <div class="privacy-block" id="p-collection">
+          <h3><span class="icon">🗂️</span> Data Collection</h3>
+          <p>The Application does not obtain any information when you download and use it. Registration is not required to use the Application.</p>
+        </div>
+
+        <div class="privacy-block" id="p-location">
+          <h3><span class="icon">📍</span> Location Data</h3>
+          <p>This Application does not collect precise information about the location of your mobile device.</p>
+        </div>
+
+        <div class="privacy-block" id="p-third-party">
+          <h3><span class="icon">🤝</span> Third Parties</h3>
+          <p>Since the Application does not collect any information, no data is shared with third parties.</p>
+        </div>
+
+        <div class="privacy-block" id="p-optout">
+          <h3><span class="icon">🚪</span> Opt-Out Rights</h3>
+          <p>You can stop all collection of information by the Application by uninstalling it using the standard uninstall processes available on your mobile device or via the Google Play Store.</p>
+        </div>
+
+        <div class="privacy-block" id="p-children">
+          <h3><span class="icon">🧒</span> Children's Privacy</h3>
+          <p>The Application is not used to knowingly solicit data from or market to children under the age of 13. The Service Provider does not knowingly collect personally identifiable information from children. Parents and legal guardians are encouraged to monitor their children's Internet usage. If you believe a child has provided personal information, please contact us at <a href="mailto:muhamadghoni0@gmail.com">muhamadghoni0@gmail.com</a>. You must be at least 16 years of age to consent to the processing of your personal information (or your parent/guardian may do so on your behalf).</p>
+        </div>
+
+        <div class="privacy-block" id="p-security">
+          <h3><span class="icon">🛡️</span> Security</h3>
+          <p>The Service Provider is concerned about safeguarding the confidentiality of your information. Since the Application does not collect any information, there is no risk of your data being accessed by unauthorized individuals.</p>
+        </div>
+
+        <div class="privacy-block" id="p-changes">
+          <h3><span class="icon">🔄</span> Changes to This Policy</h3>
+          <p>This Privacy Policy may be updated from time to time. You will be notified of any changes by an update to this page. Continued use of the Application constitutes acceptance of any revised policy.</p>
+        </div>
+
+        <div class="privacy-block" id="p-consent">
+          <h3><span class="icon">✅</span> Your Consent</h3>
+          <p>By using the Application, you consent to the processing of your information as set forth in this Privacy Policy, including any future amendments made by the Service Provider.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="contact-card">
+      <p class="section-label">// get in touch</p>
+      <h2>Have a Question?</h2>
+      <p>Reach out to the developer directly for support, feedback, or privacy inquiries.</p>
+      <a href="mailto:muhamadghoni0@gmail.com" class="email-link">
+        ✉ &nbsp;muhamadghoni0@gmail.com
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo"><span>Nova</span>Grid — Ghoni Digital Solutions</div>
+    <p>&copy; 2026 All rights reserved.</p>
+    <span class="footer-policy-date">Policy effective 2025-11-14</span>
+  </footer>
+
+</body>
+</html>
